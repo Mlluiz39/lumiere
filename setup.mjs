@@ -1,7 +1,7 @@
 // Prepara o banco e os segredos.
 // Uso: node setup.mjs "minha-senha-forte"
 //
-// 1. Gera o hash da senha e o salt (PBKDF2-SHA256, 150k iterações).
+// 1. Gera o hash da senha e o salt (PBKDF2-SHA256, 100k iterações, o teto do Workers).
 // 2. Extrai as 57 peças do catálogo atual (git HEAD) para products.json.
 // 3. Imprime os comandos que faltam.
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -15,7 +15,7 @@ if (!password || password.length < 10) {
 }
 
 const salt = randomBytes(16).toString('base64');
-const hash = pbkdf2Sync(password, Buffer.from(salt, 'base64'), 150000, 32, 'sha256').toString('base64');
+const hash = pbkdf2Sync(password, Buffer.from(salt, 'base64'), 100000, 32, 'sha256').toString('base64');
 
 // Catálogo original ainda está no git (antes da migração pra API).
 const original = execSync('git show HEAD:script.js', { encoding: 'utf8' });

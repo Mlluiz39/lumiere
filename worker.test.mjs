@@ -9,7 +9,7 @@ assert.ok(globalThis.crypto?.subtle, 'WebCrypto necessário');
 
 const SALT = randomBytes(16).toString('base64');
 const PASSWORD = 'senha-de-teste-12345';
-const HASH = pbkdf2Sync(PASSWORD, Buffer.from(SALT, 'base64'), 150000, 32, 'sha256').toString('base64');
+const HASH = pbkdf2Sync(PASSWORD, Buffer.from(SALT, 'base64'), 100000, 32, 'sha256').toString('base64');
 
 // KV mínimo: get/put/delete com TTL ignorado (não é o que testamos).
 function makeKV() {

@@ -12,11 +12,11 @@ const json = (data, status = 200, headers = {}) =>
 const b64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
 const unb64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
 
-// PBKDF2-SHA256, 150k iterações. Custo proposital: encarece força bruta.
+// PBKDF2-SHA256, 100k iterações (teto do Workers). Custo proposital: encarece força bruta.
 async function hashPassword(password, saltB64) {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(password), 'PBKDF2', false, ['deriveBits']);
   const bits = await crypto.subtle.deriveBits(
-    { name: 'PBKDF2', salt: unb64(saltB64), iterations: 150000, hash: 'SHA-256' },
+    { name: 'PBKDF2', salt: unb64(saltB64), iterations: 100000, hash: 'SHA-256' },
     key,
     256,
   );

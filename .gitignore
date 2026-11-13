@@ -1,4 +1,5 @@
 .env
+.dev.vars
 *.Zone.Identifier
 node_modules/
 products.json

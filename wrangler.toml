@@ -1,11 +1,11 @@
-name = "lumiere"
+name = "lumiere-intima"
 compatibility_date = "2026-11-01"
 pages_build_output_dir = "public"
 
 # KV: catálogo e tentativas de login.
 [[kv_namespaces]]
 binding = "PRODUCTS"
-id = "SUBSTITUA_PELO_ID"
+id = "8d1cd3adeea6447696467e86417a9651"
 
 # Segredos (wrangler secret put, NÃO coloque aqui):
 #   ADMIN_PASSWORD_HASH  ADMIN_PASSWORD_SALT  SESSION_SECRET

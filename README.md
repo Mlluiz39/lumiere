@@ -6,7 +6,7 @@ e pode adicionar, renomear e remover peças.
 ## Como a segurança funciona
 
 - A senha **não está em nenhum arquivo**. O Worker guarda só um hash PBKDF2-SHA256
-  (150k iterações) em variável secreta do Cloudflare.
+  (100k iterações, o teto do Workers) em variável secreta do Cloudflare.
 - Login emite um cookie `HttpOnly; Secure; SameSite=Strict` assinado com HMAC-SHA256.
   O navegador não consegue ler nem forjar o cookie.
 - Upload vai direto do navegador pro Cloudinary com uma **assinatura** gerada pelo
