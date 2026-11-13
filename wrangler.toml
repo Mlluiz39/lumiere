@@ -1,0 +1,12 @@
+name = "lumiere"
+compatibility_date = "2026-11-01"
+pages_build_output_dir = "public"
+
+# KV: catálogo e tentativas de login.
+[[kv_namespaces]]
+binding = "PRODUCTS"
+id = "SUBSTITUA_PELO_ID"
+
+# Segredos (wrangler secret put, NÃO coloque aqui):
+#   ADMIN_PASSWORD_HASH  ADMIN_PASSWORD_SALT  SESSION_SECRET
+#   CLOUDINARY_API_KEY   CLOUDINARY_API_SECRET  CLOUDINARY_CLOUD_NAME
