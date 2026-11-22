@@ -69,16 +69,22 @@ function nextRef() {
 
 const thumb = (p) => (cloudName ? CDN(cloudName, p.publicId.split('/')[1], 200) : '');
 
+let searchTerm = '';
+$('search').addEventListener('input', (e) => { searchTerm = e.target.value.toLowerCase(); render(); });
+
 function render() {
   $('count').textContent = products.length;
   $('ref').value = nextRef();
-  $('items').innerHTML = products
+  const filtered = searchTerm
+    ? products.filter((p) => p.name.toLowerCase().includes(searchTerm) || p.ref.toLowerCase().includes(searchTerm) || p.publicId.toLowerCase().includes(searchTerm))
+    : products;
+  $('items').innerHTML = filtered
     .map(
       (p) => `<article class="item">
         <img src="${thumb(p)}" alt="" loading="lazy">
         <div>
           <h3>${escape(p.name)}</h3>
-          <p class="meta">${CATS[p.category] || p.category} · ${escape(p.ref)}</p>
+          <p class="meta">${CATS[p.category] || p.category} · ${escape(p.ref)} · ${escape(p.publicId.split('/').pop())}</p>
         </div>
         <div class="acts">
           <button class="btn ghost" data-edit="${p.ref}">Editar</button>
@@ -86,7 +92,7 @@ function render() {
         </div>
       </article>`,
     )
-    .join('') || '<p class="sub">Nenhuma peça cadastrada.</p>';
+    .join('') || `<p class="sub">${searchTerm ? 'Nenhuma peça encontrada.' : 'Nenhuma peça cadastrada.'}</p>`;
 }
 
 const escape = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
