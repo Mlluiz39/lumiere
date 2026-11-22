@@ -33,6 +33,22 @@
   .hide{display:none!important}
   #preview{width:120px;height:150px;object-fit:cover;background:var(--cream);margin-top:10px;display:block}
   @media(max-width:600px){.row{grid-template-columns:1fr}.item{grid-template-columns:44px 1fr}.item img{width:44px;height:56px}.item .acts{grid-column:1/-1;justify-content:stretch}}
+  /* modais */
+  .modal{max-width:440px;width:calc(100% - 32px);padding:0;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:0 20px 60px rgba(0,0,0,.18)}
+  .modal::backdrop{background:rgba(40,20,28,.45);backdrop-filter:blur(4px)}
+  .modal-header{display:flex;justify-content:space-between;align-items:flex-start;padding:20px 22px 16px;border-bottom:1px solid var(--line)}
+  .modal-header h2{font-size:17px;margin:0}
+  .modal-header .eyebrow{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+  .modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:4px 8px;line-height:1;border-radius:6px;transition:background .15s}
+  .modal-close:hover{background:var(--paper);color:var(--wine)}
+  .modal-body{padding:20px 22px 22px}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+  .modal-product-img{width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--cream)}
+  .remove-preview{display:flex;gap:14px;align-items:center;padding:14px;background:var(--paper);border:1px solid var(--line);border-radius:8px;margin-bottom:14px}
+  .remove-preview img{width:52px;height:65px;object-fit:cover;border-radius:4px;background:var(--cream)}
+  .remove-warning{font-size:13px;color:var(--muted);line-height:1.6;padding:12px 14px;background:#fdf5f5;border:1px solid #f0d0d0;border-radius:8px}
+  .btn-remove{background:#a33;border-color:#a33;color:#fff}
+  .btn-remove:hover{background:#8a2222}
 </style>
 </head>
 <body>
@@ -99,15 +115,64 @@
     </div>
   </section>
 
-  <dialog id="productDialog" style="max-width:420px;padding:0;border:1px solid var(--line);background:#fff">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)">
-      <h2 id="dialogName" style="font-size:17px;margin:0"></h2>
-      <button class="btn ghost" onclick="$('productDialog').close()" style="min-height:32px;padding:4px 12px;font-size:18px">×</button>
+  <dialog id="productDialog" class="modal">
+    <div class="modal-header">
+      <h2 id="dialogName"></h2>
+      <button class="modal-close" onclick="$('productDialog').close()">×</button>
     </div>
-    <img id="dialogImg" alt="" style="width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--cream)">
-    <div style="padding:14px 18px 18px">
-      <p class="meta" id="dialogMeta" style="margin-bottom:8px"></p>
+    <img id="dialogImg" alt="" class="modal-product-img">
+    <div class="modal-body">
+      <p class="meta" id="dialogMeta"></p>
       <a id="dialogLink" class="btn" target="_blank" rel="noopener noreferrer" style="width:100%;text-align:center;text-decoration:none">Abrir na vitrine ↗</a>
+    </div>
+  </dialog>
+
+  <dialog id="editDialog" class="modal">
+    <div class="modal-header">
+      <div><p class="eyebrow">EDITAR PEÇA</p><h2 id="editTitle"></h2></div>
+      <button class="modal-close" onclick="$('editDialog').close()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label for="editName">Nome da peça</label>
+        <input id="editName" maxlength="80">
+      </div>
+      <div class="field">
+        <label for="editCategory">Categoria</label>
+        <select id="editCategory">
+          <option value="lingerie">Lingerie</option>
+          <option value="pijamas">Pijamas &amp; camisolas</option>
+          <option value="masculino">Masculino</option>
+          <option value="meias">Meias</option>
+        </select>
+      </div>
+      <p class="msg" id="editMsg"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="$('editDialog').close()">Cancelar</button>
+        <button class="btn" id="editSave">Salvar alterações</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="removeDialog" class="modal">
+    <div class="modal-header">
+      <div><p class="eyebrow">REMOVER PEÇA</p><h2 id="removeTitle"></h2></div>
+      <button class="modal-close" onclick="$('removeDialog').close()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="remove-preview">
+        <img id="removeImg" alt="">
+        <div>
+          <p id="removeName" style="font-weight:600"></p>
+          <p class="meta" id="removeMeta"></p>
+        </div>
+      </div>
+      <p class="remove-warning">A peça será removida da vitrine. Você pode reativá-la depois reenviando a foto.</p>
+      <p class="msg" id="removeMsg"></p>
+      <div class="modal-actions">
+        <button class="btn ghost" onclick="$('removeDialog').close()">Cancelar</button>
+        <button class="btn btn-remove" id="removeConfirm">Remover da vitrine</button>
+      </div>
     </div>
   </dialog>
 

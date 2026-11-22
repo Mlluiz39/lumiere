@@ -189,23 +189,50 @@ $('items').addEventListener('click', async (e) => {
   if (edit) {
     const p = products.find((x) => x.ref === edit.dataset.edit);
     if (!p) return;
-    const name = prompt('Nome da peça:', p.name);
-    if (name === null) return;
-    if (!name.trim()) return alert('O nome não pode ficar vazio.');
-    const category = prompt(`Categoria (${Object.keys(CATS).join(', ')}):`, p.category);
-    if (category === null) return;
-    if (!CATS[category]) return alert('Categoria inválida.');
-    await save(products.map((x) => (x.ref === p.ref ? { ...x, name: name.trim(), category } : x)), null, $('addMsg'));
+    $('editTitle').textContent = p.name;
+    $('editName').value = p.name;
+    $('editCategory').value = p.category;
+    $('editMsg').textContent = '';
+    $('editDialog').showModal();
+    $('editName').focus();
+    // Guarda ref para o handler do botão salvar
+    $('editDialog').dataset.ref = p.ref;
   }
 
   if (remove) {
     const p = products.find((x) => x.ref === remove.dataset.remove);
     if (!p) return;
-    if (!confirm(`Remover "${p.name}" da vitrine?\n\nA peça sai do site. Dá pra reativar depois reenviando.`)) return;
-    // Peça vendida some do catálogo. A imagem fica no Cloudinary pra reativar se preciso.
-    await save(products.filter((x) => x.ref !== p.ref), null, $('addMsg'));
+    $('removeTitle').textContent = p.name;
+    $('removeName').textContent = p.name;
+    $('removeMeta').textContent = `${CATS[p.category] || p.category} · ${p.ref}`;
+    $('removeImg').src = thumb(p);
+    $('removeMsg').textContent = '';
+    $('removeDialog').showModal();
+    // Guarda ref para o handler do botão confirmar
+    $('removeDialog').dataset.ref = p.ref;
   }
 });
+
+// Handler do botão salvar edição
+$('editSave').addEventListener('click', async () => {
+  const ref = $('editDialog').dataset.ref;
+  const name = $('editName').value.trim();
+  const category = $('editCategory').value;
+  if (!name) return msg($('editMsg'), 'O nome não pode ficar vazio.');
+  if (!CATS[category]) return msg($('editMsg'), 'Categoria inválida.');
+  const ok = await save(products.map((x) => (x.ref === ref ? { ...x, name, category } : x)), null, $('editMsg'));
+  if (ok) $('editDialog').close();
+});
+
+// Handler do botão confirmar remoção
+$('removeConfirm').addEventListener('click', async () => {
+  const ref = $('removeDialog').dataset.ref;
+  const ok = await save(products.filter((x) => x.ref !== ref), null, $('removeMsg'));
+  if (ok) $('removeDialog').close();
+});
+
+// Fechar modais clicando no backdrop
+document.querySelectorAll('.modal').forEach((d) => d.addEventListener('click', (e) => { if (e.target === d) d.close(); }));
 
 boot().catch(() => {
   $('loginView').classList.remove('hide');
