@@ -99,6 +99,18 @@
     </div>
   </section>
 
+  <dialog id="productDialog" style="max-width:420px;padding:0;border:1px solid var(--line);background:#fff">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)">
+      <h2 id="dialogName" style="font-size:17px;margin:0"></h2>
+      <button class="btn ghost" onclick="$('productDialog').close()" style="min-height:32px;padding:4px 12px;font-size:18px">×</button>
+    </div>
+    <img id="dialogImg" alt="" style="width:100%;aspect-ratio:4/5;object-fit:cover;background:var(--cream)">
+    <div style="padding:14px 18px 18px">
+      <p class="meta" id="dialogMeta" style="margin-bottom:8px"></p>
+      <a id="dialogLink" class="btn" target="_blank" rel="noopener noreferrer" style="width:100%;text-align:center;text-decoration:none">Abrir na vitrine ↗</a>
+    </div>
+  </dialog>
+
 </div>
 <script src="/admin.js"></script>
 </body>

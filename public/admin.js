@@ -81,9 +81,9 @@ function render() {
   $('items').innerHTML = filtered
     .map(
       (p) => `<article class="item">
-        <img src="${thumb(p)}" alt="" loading="lazy">
+        <img src="${thumb(p)}" alt="" loading="lazy" data-view="${p.ref}" style="cursor:pointer">
         <div>
-          <h3>${escape(p.name)}</h3>
+          <h3 data-view="${p.ref}" style="cursor:pointer">${escape(p.name)}</h3>
           <p class="meta">${CATS[p.category] || p.category} · ${escape(p.ref)} · ${escape(p.publicId.split('/').pop())}</p>
         </div>
         <div class="acts">
@@ -167,8 +167,22 @@ $('addForm').addEventListener('submit', async (e) => {
   }
 });
 
-// ---------- edição e remoção ----------
+// ---------- edição, remoção e preview ----------
+const bigImg = (p) => cloudName ? CDN(cloudName, p.publicId.split('/')[1], 800) : '';
+
 $('items').addEventListener('click', async (e) => {
+  const view = e.target.closest('[data-view]');
+  if (view) {
+    const p = products.find((x) => x.ref === view.dataset.view);
+    if (!p) return;
+    $('dialogName').textContent = p.name;
+    $('dialogImg').src = bigImg(p);
+    $('dialogMeta').textContent = `${CATS[p.category] || p.category} · ${p.ref} · ${p.publicId.split('/').pop()}`;
+    $('dialogLink').href = `/#produtos`;
+    $('productDialog').showModal();
+    return;
+  }
+
   const edit = e.target.closest('[data-edit]');
   const remove = e.target.closest('[data-remove]');
 
